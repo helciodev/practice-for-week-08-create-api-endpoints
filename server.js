@@ -74,7 +74,11 @@ const server = http.createServer((req, res) => {
     // POST /dogs
     if (req.method === "POST" && req.url === "/dogs") {
       const { name, age } = req.body;
-      // Your code here
+      const newDog = { dogId: getNewDogId(), name, age };
+      dogs.push(newDog);
+      res.statusCode = 201;
+      res.setHeader("Content-Type", "application/json");
+      res.write(JSON.stringify(newDog));
       return res.end();
     }
 
@@ -86,7 +90,18 @@ const server = http.createServer((req, res) => {
       const urlParts = req.url.split("/");
       if (urlParts.length === 3) {
         const dogId = urlParts[2];
-        // Your code here
+        const dog = dogs.find((dog) => dog.dogId === Number(dogId));
+        const { name, age } = req.body;
+        if (dog.name !== name) {
+          dog.name = name;
+        }
+
+        if (dog.age !== age) {
+          dog.age = age;
+        }
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.write(JSON.stringify(dog));
       }
       return res.end();
     }
