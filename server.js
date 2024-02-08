@@ -64,7 +64,9 @@ const server = http.createServer((req, res) => {
       const urlParts = req.url.split("/"); // ['', 'dogs', '1']
       if (urlParts.length === 3) {
         const dogId = urlParts[2];
-        // Your code here
+        const dog = dogs.find((dog) => dog.dogId === Number(dogId));
+        res.setHeader("Content-Type", "application/json");
+        res.write(JSON.stringify(dog));
       }
       return res.end();
     }
